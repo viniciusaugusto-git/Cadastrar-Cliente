@@ -1,0 +1,130 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BASE */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+  max-width: 800px;
+
+  margin: 20px auto;
+  padding: 16px;
+
+  background: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 600;
+  font-weight: bold;
+}
+
+/* BOTÃO */
+.btn {
+  background: #333;
+  color: #fefefe;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.2s;
+  cursor: pointer;
+
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn:hover {
+  opacity: 0.85;
+  
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke-width: 2.5;
+  stroke: currentColor;
+}
+
+/* FORM */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #EEE;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #111;
+}
+
+/* TABELA */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  text-align: left;
+  font-size: 13px;
+  color: #666;
+}
+
+th {
+  font-size: 14px;
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+
+td {
+  padding: 12px 0;
+  border-top: 1px solid #eee;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* LINK */
+.link {
+  margin-top: 15px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
