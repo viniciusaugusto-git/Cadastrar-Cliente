@@ -1,53 +1,46 @@
 @import 'variables.css';
 
-/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* BASE */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   background-color: var(--gray-light);
   color: var(--black);
 }
 
-/* CONTAINER */
 .container {
   width: 100%;
-  max-width: 800px;
-
+  max-width: 900px;
   margin: 20px auto;
   padding: 16px;
-
   background: var(--white);
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 12px;
 }
 
 .actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: end;
   gap: 10px;
 }
 
 h1 {
   font-size: 22px;
-  font-weight: 600;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-/* BOTÃO */
 .btn {
   background: var(--black);
   color: var(--white);
@@ -55,64 +48,42 @@ h1 {
   text-decoration: none;
   border-radius: 6px;
   font-size: 14px;
-  transition: 0.2s;
+  transition: opacity 0.2s;
   cursor: pointer;
-
-  display: flex;
+  border: none;
+  display: inline-flex;
   gap: 6px;
   align-items: center;
 }
 
-.btn:hover {
-  opacity: 0.85;
-
-}
+.btn:hover { opacity: 0.85; }
 
 .btn-edit,
 .btn-delete {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   padding: 6px 10px;
-
   font-size: 12px;
   font-weight: bold;
   border-radius: 6px;
   border: 1px solid transparent;
-
   color: var(--white);
   cursor: pointer;
-
   transition: all 0.2s ease;
 }
+
 .btn-edit {
   background-color: var(--yellow);
   border-color: var(--yellow);
+  color: var(--black);
 }
-.btn-delete{
+
+.btn-delete {
   background-color: var(--red);
   border-color: var(--red);
 }
 
-.icon {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke-width: 2.5;
-  stroke: currentColor;
-}
-
-.icon-delete,
-.icon-edit {
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke-width: 1.5;
-  stroke: currentColor;
-}
-
-/* FORM */
 .form {
   display: flex;
   flex-direction: column;
@@ -132,11 +103,6 @@ input:focus {
   border-color: var(--black);
 }
 
-.input-error {
-  border-color: var(--red);
-}
-
-/* TABELA */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -161,13 +127,11 @@ td {
   font-size: 12px;
 }
 
-/* LINK */
 .link {
   margin-top: 15px;
   color: var(--black);
   text-decoration: none;
   font-size: 14px;
-
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -175,4 +139,16 @@ td {
 
 .link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
 }

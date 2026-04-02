@@ -1,36 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <title>Novo Cliente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cliente</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
   <div class="container">
-    <h1>Novo Cliente</h1>
+    <h1 id="form-title">Novo Cliente</h1>
 
     <form id="form-cliente" class="form">
       <input type="text" id="name" placeholder="Nome" required>
       <input type="email" id="email" placeholder="Email" required>
       <input type="tel" id="phone" placeholder="Telefone">
-
       <div>
         <button type="submit" class="btn">Salvar</button>
       </div>
     </form>
 
-    <a href="index.html" class="link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-      </svg>
-      Voltar
-    </a>
+    <a href="index.html" class="link">Voltar</a>
   </div>
 
   <script type="module" src="js/app.js"></script>
 </body>
-
 </html>

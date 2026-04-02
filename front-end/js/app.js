@@ -1,121 +1,136 @@
-import serviceClient from "./services/client.services.js";
+import clientService from "./services/client.services.js";
 
 const params = new URLSearchParams(window.location.search);
 const idParam = params.get("id");
 
 const form = document.getElementById("form-cliente");
-const tabela = document.getElementById("tabela-clientes");
+const tableBody = document.getElementById("tabela-clientes");
+const formTitle = document.getElementById("form-title");
+const inputPhone = document.getElementById("phone");
 
-// ===== SUBMIT =====
 if (form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  setupForm();
+}
 
-    const client = {
-      name: document.getElementById("name").value.toLowerCase().trim(),
-      email: document.getElementById("email").value.toLowerCase().trim(),
-      phone: document.getElementById("phone").value.trim(),
-    };
+if (tableBody) {
+  loadClients();
+}
+
+if (inputPhone) {
+  applyPhoneMask(inputPhone);
+}
+
+async function setupForm() {
+  if (idParam) {
+    if (formTitle) formTitle.textContent = "Editar Cliente";
+    await loadClient();
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const client = getClientFromForm();
 
     try {
       if (idParam) {
-        await serviceClient.updateClient(idParam, client);
-        alert("Cliente atualizado!");
+        await clientService.updateClient(idParam, client);
+        alert("Cliente atualizado com sucesso!");
       } else {
-        await serviceClient.createClient(client);
-        alert("Cliente cadastrado!");
+        await clientService.createClient(client);
+        alert("Cliente cadastrado com sucesso!");
       }
 
       window.location.href = "index.html";
     } catch (error) {
-      console.error("Erro ao salvar cliente:", error);
-      const errorMessage = error && error.message ? ` Detalhes: ${error.message}` : "";
-      alert("Erro ao salvar cliente." + errorMessage);
+      alert(error.message || "Erro ao salvar cliente");
     }
   });
 }
 
-// ===== EDITAR =====
-if (idParam && form) {
-  loadClient();
+function getClientFromForm() {
+  return {
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim().toLowerCase(),
+    phone: document.getElementById("phone").value.trim(),
+  };
 }
 
 async function loadClient() {
-  const client = await serviceClient.getClientById(idParam);
-
-  document.getElementById("name").value = client.name;
-  document.getElementById("email").value = client.email;
-  document.getElementById("phone").value = client.phone;
-}
-
-// ===== LISTAR =====
-if (tabela) {
-  loadClients();
+  try {
+    const client = await clientService.getClientById(idParam);
+    document.getElementById("name").value = client.name || "";
+    document.getElementById("email").value = client.email || "";
+    document.getElementById("phone").value = client.phone || "";
+  } catch (error) {
+    alert(error.message || "Erro ao carregar cliente");
+    window.location.href = "index.html";
+  }
 }
 
 async function loadClients() {
-  const clients = await serviceClient.getClients();
+  try {
+    const clients = await clientService.getClients();
+    tableBody.innerHTML = "";
 
-  tabela.innerHTML = "";
+    clients.forEach((client) => {
+      const tr = document.createElement("tr");
 
-  clients.forEach((client, i) => {
-    const tr = document.createElement("tr");
+      const editButton = `<button class="btn-edit" data-edit-id="${client.id}">Editar</button>`;
+      const deleteButton = `<button class="btn-delete" data-delete-id="${client.id}">Excluir</button>`;
 
-    tr.innerHTML = `
-      <td>${client.id}</td>
-      <td>${capitalizeText(client.name)}</td>
-      <td>${client.email}</td>
-      <td>${client.phone}</td>
-      <td class="actions">
-        <button class="btn-edit" onclick="window.location.href='form.html?id=${client.id}'">
-          Editar
-        </button>
-        <button class="btn-delete" onclick="deleteClient(${client.id})">
-          Excluir
-        </button>
-      </td>
-    `;
+      tr.innerHTML = `
+        <td>${client.id}</td>
+        <td>${capitalizeText(client.name || "")}</td>
+        <td>${client.email || ""}</td>
+        <td>${client.phone || ""}</td>
+        <td class="actions">${editButton}${deleteButton}</td>
+      `;
 
-    tabela.appendChild(tr);
+      tableBody.appendChild(tr);
+    });
+
+    bindTableActions();
+  } catch (error) {
+    alert(error.message || "Erro ao carregar clientes");
+  }
+}
+
+function bindTableActions() {
+  document.querySelectorAll("[data-edit-id]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("data-edit-id");
+      window.location.href = `form.html?id=${id}`;
+    });
+  });
+
+  document.querySelectorAll("[data-delete-id]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const id = button.getAttribute("data-delete-id");
+      const confirmed = window.confirm("Deseja realmente excluir este cliente?");
+      if (!confirmed) return;
+
+      try {
+        await clientService.deleteClient(id);
+        await loadClients();
+      } catch (error) {
+        alert(error.message || "Erro ao excluir cliente");
+      }
+    });
   });
 }
 
-// ===== DELETE =====
-window.deleteClient = async function (id) {
-  try {
-    await serviceClient.deleteClient(id);
-    window.location.reload();
-  } catch {
-    alert("Erro ao excluir cliente");
-  }
-};
-
-// ===== UTIL =====
-/**
- * Capitaliza um texto, deixando a primeira letra de cada palavra em maiúscula e o restante em minúscula
- * @param {string} text - Texto que será capitalizado
- * @returns {string} Retorna o texto capitalizado
- */
 function capitalizeText(text) {
   return text
     .toLowerCase()
     .split(" ")
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
 
-// ===== MÁSCARA DE TELEFONE =====
-const inputPhone = document.getElementById("phone");
-
-if (inputPhone) {
-  inputPhone.addEventListener("input", (e) => {
-    let value = e.target.value;
-
-    // remove tudo que não for número
-    value = value.replace(/\D/g, "");
-
-    // aplica máscara
-    if (value.length > 11) value = value.slice(0, 11);
+function applyPhoneMask(input) {
+  input.addEventListener("input", (event) => {
+    let value = event.target.value.replace(/\D/g, "").slice(0, 11);
 
     if (value.length > 6) {
       value = value.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
@@ -125,6 +140,6 @@ if (inputPhone) {
       value = value.replace(/(\d*)/, "($1");
     }
 
-    e.target.value = value;
+    event.target.value = value;
   });
 }
