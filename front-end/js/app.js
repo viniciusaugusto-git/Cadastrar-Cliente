@@ -27,8 +27,10 @@ if (form) {
       }
 
       window.location.href = "index.html";
-    } catch {
-      alert("Erro ao salvar cliente");
+    } catch (error) {
+      console.error("Erro ao salvar cliente:", error);
+      const errorMessage = error && error.message ? ` Detalhes: ${error.message}` : "";
+      alert("Erro ao salvar cliente." + errorMessage);
     }
   });
 }
@@ -80,8 +82,12 @@ async function loadClients() {
 
 // ===== DELETE =====
 window.deleteClient = async function (id) {
-  if (!confirm("Tem certeza?")) return;
-
+  try {
+    await serviceClient.deleteClient(id);
+    window.location.reload();
+  } catch {
+    alert("Erro ao excluir cliente");
+  }
   await serviceClient.deleteClient(id);
   window.location.reload();
 };
