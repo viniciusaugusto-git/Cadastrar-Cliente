@@ -66,14 +66,14 @@ async function loadClients() {
       <td>${capitalizeText(client.name)}</td>
       <td>${client.email}</td>
       <td>${client.phone}</td>
-      <div class="actions">
+      <td class="actions">
         <button class="btn-edit" onclick="window.location.href='form.html?id=${client.id}'">
           Editar
         </button>
         <button class="btn-delete" onclick="deleteClient(${client.id})">
           Excluir
         </button>
-      </div>
+      </td>
     `;
 
     tabela.appendChild(tr);
@@ -88,8 +88,6 @@ window.deleteClient = async function (id) {
   } catch {
     alert("Erro ao excluir cliente");
   }
-  await serviceClient.deleteClient(id);
-  window.location.reload();
 };
 
 // ===== UTIL =====
