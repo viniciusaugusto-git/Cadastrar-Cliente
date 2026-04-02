@@ -93,10 +93,40 @@ window.deleteClient = async function (id) {
 };
 
 // ===== UTIL =====
+/**
+ * Capitaliza um texto, deixando a primeira letra de cada palavra em maiúscula e o restante em minúscula
+ * @param {string} text - Texto que será capitalizado
+ * @returns {string} Retorna o texto capitalizado
+ */
 function capitalizeText(text) {
   return text
     .toLowerCase()
     .split(" ")
     .map(w => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
+}
+
+// ===== MÁSCARA DE TELEFONE =====
+const inputPhone = document.getElementById("phone");
+
+if (inputPhone) {
+  inputPhone.addEventListener("input", (e) => {
+    let value = e.target.value;
+
+    // remove tudo que não for número
+    value = value.replace(/\D/g, "");
+
+    // aplica máscara
+    if (value.length > 11) value = value.slice(0, 11);
+
+    if (value.length > 6) {
+      value = value.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
+    } else if (value.length > 2) {
+      value = value.replace(/(\d{2})(\d+)/, "($1) $2");
+    } else {
+      value = value.replace(/(\d*)/, "($1");
+    }
+
+    e.target.value = value;
+  });
 }
